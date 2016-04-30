@@ -22,7 +22,7 @@ import org.eclipse.text.edits.TextEdit;
 
 public class MutantGenerator {
 	// Specify the maximum number of mutants you want to create.
-	static int maxNumberOfMutants = 5;
+	static int maxNumberOfMutants = Integer.MAX_VALUE;
 
 	static List<ASTVisitor> mutantCreators = ExpressionVisitor.getVisitors();
 	static int numberOfAllowedMutantVisitor = mutantCreators.size();
