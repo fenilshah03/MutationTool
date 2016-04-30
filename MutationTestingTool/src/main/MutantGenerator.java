@@ -29,8 +29,13 @@ public class MutantGenerator {
 
 	public static void main(String ar[]) {
 		// take project path from argument
-		if (ar[0] != null && ar[0].length() > 1)
-			GeoProjectInformation.projectFolderPrefix = ar[0];
+		try {
+			if (ar[0] != null && ar[0].length() > 1)
+				GeoProjectInformation.projectFolderPrefix = ar[0];
+		} catch (ArrayIndexOutOfBoundsException e1) {
+			System.out.println("Please enter the project directory path as first argumnt to the jar file.");
+			System.out.println("For example: java -jar MutationInsertion.jar \"path\\to\\parent-dir\\geo-master\"");
+		}
 
 		try {
 			// fileChanges - String value format:
@@ -176,6 +181,9 @@ public class MutantGenerator {
 			System.out.println(e.getMessage());
 		} catch (BadLocationException e) {
 			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Exception occurred. Please check details.");
+			e.printStackTrace();
 		}
 	}
 
