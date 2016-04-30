@@ -1,9 +1,12 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 
 public class GeoProjectInformation {
 	// The project path - The project should exist here.
@@ -22,18 +25,11 @@ public class GeoProjectInformation {
 		List<String> filePaths = new ArrayList<String>();
 
 		// All project files with code EXCLUDING test files.
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\GeoHash.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\Base32.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\Coverage.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\CoverageLongs.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\Direction.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\LatLong.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\Parity.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\mem\\Geomem.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\package-info.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\mem\\Info.java");
-		filePaths.add("\\src\\main\\java\\com\\github\\davidmoten\\geo\\util\\Preconditions.java");
-
+		Collection<File> files = FileUtils.listFiles(new File(projectFolderPrefix + "\\src\\main"), new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
+		for (File file : files) {
+			String[] absPath = file.getAbsolutePath().split(projectFolderPrefix);
+			filePaths.add(absPath[1]);
+		}
 		return filePaths;
 	}
 }
