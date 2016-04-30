@@ -50,7 +50,7 @@ public class GeoProjectInformation {
 	public static void commitReport() {
 		String[] pathParts = projectFolderPrefix.split("geo-master");
 		try {
-			File f = new File(pathParts[0] + "\\MutationToolReport.txt");
+			File f = new File(pathParts[0] + "\\MutationInsertionReport.txt");
 			if (f.exists() && !f.isDirectory()) {
 				// delete previously generated report
 				f.delete();
