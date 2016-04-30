@@ -35,6 +35,7 @@ public class MutantGenerator {
 		} catch (ArrayIndexOutOfBoundsException e1) {
 			System.out.println("Please enter the project directory path as first argumnt to the jar file.");
 			System.out.println("For example: java -jar MutationInsertion.jar \"path\\to\\parent-dir\\geo-master\"");
+			return;
 		}
 
 		try {
