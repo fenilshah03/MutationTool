@@ -7,7 +7,7 @@ class PrefixVisitorDecrementToIncrement extends PrefixVisitor {
 		if (node.getOperator().equals(PrefixExpression.Operator.DECREMENT)) {
 			// convert -- to ++
 			System.out.println();
-			System.out.println("Prefix chnage: convert -- to ++");
+			System.out.println("Prefix change: convert -- to ++");
 			node.setOperator(PrefixExpression.Operator.INCREMENT);
 		}
 	}

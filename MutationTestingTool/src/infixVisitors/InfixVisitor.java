@@ -1,6 +1,8 @@
 package infixVisitors;
 
 import java.util.ArrayList;
+
+import main.GeoProjectInformation;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;

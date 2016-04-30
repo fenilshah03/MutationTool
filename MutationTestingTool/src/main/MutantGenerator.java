@@ -1,3 +1,5 @@
+package main;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,12 +22,16 @@ import org.eclipse.text.edits.TextEdit;
 
 public class MutantGenerator {
 	// Specify the maximum number of mutants you want to create.
-	static int maxNumberOfMutants = Integer.MAX_VALUE;
+	static int maxNumberOfMutants = 5;
 
 	static List<ASTVisitor> mutantCreators = ExpressionVisitor.getVisitors();
 	static int numberOfAllowedMutantVisitor = mutantCreators.size();
 
 	public static void main(String ar[]) {
+		// take project path from argument
+		if (ar[0] != null && ar[0].length() > 1)
+			GeoProjectInformation.projectFolderPrefix = ar[0];
+
 		try {
 			// fileChanges - String value format:
 			// filePath-className-methodName-statementNumber-mutationClassName
@@ -51,8 +57,8 @@ public class MutantGenerator {
 				GeoProjectInformation.createProjectCopy(mutantNo);
 
 				String currentProjectPath = GeoProjectInformation.projectFolderPrefix + "-" + mutantNo;
-				System.out.println("****************************************************************");
-				System.out.println("Mutant Project Path: " + currentProjectPath);
+				GeoProjectInformation.buildReport("****************************************************************");
+				GeoProjectInformation.buildReport("Mutant Project Path: " + currentProjectPath);
 
 				// iterate through files
 				for (String filePath : filePaths) {
@@ -64,7 +70,7 @@ public class MutantGenerator {
 
 					// get file content
 					String currentFilePath = currentProjectPath + filePath;
-					System.out.println(currentFilePath);
+					GeoProjectInformation.buildReport(currentFilePath);
 					File currentFile = new File(currentFilePath);
 					String fileContent = FileUtils.readFileToString(currentFile);
 
@@ -108,22 +114,24 @@ public class MutantGenerator {
 
 									Statement s = lst.get(statementCounter);
 
-									String before, after;
+									String beforeToCompare, afterToCompare, beforeToReport, afterToReport;
 
 									int position = s.getStartPosition();
 
-									before = s + " -> at Position " + position;
+									beforeToCompare = s + " -> at Position " + position;
+									beforeToReport = s.toString();
 
 									s.accept(currentVisitor);
 
-									after = s + " -> at Position " + position;
-									if (!(before.equals(after))) {
+									afterToCompare = s + " -> at Position " + position;
+									afterToReport = s.toString();
+
+									if (!(beforeToCompare.equals(afterToCompare))) {
 										isChanged = true;
-										System.out.println();
-										System.out.println("Before: " + before);
-										System.out.println("After: " + after);
-										System.out.println("Eqaulity: " + before.equals(after));
-										System.out.println();
+										GeoProjectInformation.buildReport();
+										GeoProjectInformation.buildReport("Before: " + beforeToReport);
+										GeoProjectInformation.buildReport("After: " + afterToReport);
+										GeoProjectInformation.buildReport();
 										fileChanges.add(filePath + "-" + className + "-" + methodName + "-"
 												+ statementCounter + "-" + currentVisitor.getClass().toString());
 									}
@@ -148,17 +156,20 @@ public class MutantGenerator {
 					// It means that all possible mutants are created
 					// There is nothing left to change as per the defined mutation strategy.
 					// So delete current project folder as it is same as original project, not a mutant.
-					System.out.println();
-					System.out.println("*** No more changes possible as per defined mutation strategy. ***");
-					System.out.println("Deleting " + currentProjectPath + " ...");
+					GeoProjectInformation.buildReport();
+					GeoProjectInformation
+							.buildReport("*** No more changes possible as per defined mutation strategy. ***");
+					GeoProjectInformation.buildReport("Deleting " + currentProjectPath + " ...");
 					GeoProjectInformation.deleteProjectCopy(mutantNo);
-					System.out.println(currentProjectPath + " deleted.");
-					System.out.println("Mutant creation complete. Please run Powershell script to test.");
+					GeoProjectInformation.buildReport(currentProjectPath + " deleted.");
+					GeoProjectInformation
+							.buildReport("Mutant creation complete. Please run Powershell script to test.");
 					// exit the mutant creation process.
 					break;
 				}
 			} // end of project folder loop
-
+				// save report
+			GeoProjectInformation.commitReport();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (MalformedTreeException e) {
@@ -167,4 +178,5 @@ public class MutantGenerator {
 			System.out.println(e.getMessage());
 		}
 	}
+
 }
