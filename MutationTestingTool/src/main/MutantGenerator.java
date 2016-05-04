@@ -33,7 +33,7 @@ public class MutantGenerator {
 			if (ar[0] != null && ar[0].length() > 1)
 				GeoProjectInformation.projectFolderPrefix = ar[0];
 		} catch (ArrayIndexOutOfBoundsException e1) {
-			System.out.println("Please enter the project directory path as first argumnt to the jar file.");
+			System.out.println("Please enter the project directory path as first argument to the jar file.");
 			System.out.println("For example: java -jar MutationInsertion.jar \"path\\to\\parent-dir\\geo-master\"");
 			return;
 		}
